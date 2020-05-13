@@ -8,5 +8,5 @@ select
   --, p.created
   from {{ ref('stg_orders') }} o
 join {{ ref('stg_payments') }} p
-on o.order_id=p."orderID"
+on o.order_id=p.order_id
 group by 1,2,3,4
