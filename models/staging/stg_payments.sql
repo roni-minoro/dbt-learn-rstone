@@ -1,6 +1,6 @@
 select
   ID
-  , "orderID" as orderid
+  , "orderID" as order_id
   , "paymentMethod" as payment_method
   , amount
   , created
