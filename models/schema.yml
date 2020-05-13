@@ -1,4 +1,34 @@
 version: 2
+
+sources:
+  - name: jaffle_shop
+    database: raw
+
+    tables:
+      - name: customers
+        description: raw customer table
+      - name: orders
+        description: raw orders table
+
+  - name: stripe
+    description: raw stripe schema
+    database: raw
+
+    freshness:
+      warn_after: {count: 12, period: hour}
+      error_after: {count: 24, period: hour}
+
+    tables:
+      - name: payment
+        description: raw stripe payments 
+        loaded_at_field: _batched_at # required for freshness snapshotting
+        columns:
+          - name: amount
+            description: amount of payment in cents
+            tests:
+              - not_null
+
+
 models:
   - name: customers
     description: One record per customer
@@ -30,3 +60,9 @@ models:
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+  - name: orders
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
